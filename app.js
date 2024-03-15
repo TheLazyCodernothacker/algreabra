@@ -1,4 +1,5 @@
 import express from "express";
+import { whitelist } from "./whitelist.js";
 import cookieParser from "cookie-parser";
 import http from "node:http";
 import createBareServer from "@tomphttp/bare-server-node";
@@ -192,7 +193,14 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "src", "index.html"));
+  console.log(req.ip)
+  if (whitelist.includes(req.ip)) {
+
+    res.sendFile(path.join(__dirname, "src", "index.html"));
+  }
+  else {
+    res.sendFile(path.join(__dirname, "src", "Blocked.html"));
+  }
 });
 
 app.get("/options", (req, res) => {
